@@ -23,7 +23,7 @@ jobs:
 
     - name: Copy Files to EC2
       run: |
-        scp -i private_key.pem -r apps config Dockerfile manage.py ubuntu@ec2-54-89-247-128.compute-1.amazonaws.com:/home/ubuntu/django_project
+        scp -i private_key.pem -r requirments.txt apps config Dockerfile manage.py ubuntu@ec2-54-89-247-128.compute-1.amazonaws.com:/home/ubuntu/django_project
 
     - name: Build and Run Docker on EC2
       run: |
