@@ -1,14 +1,29 @@
-FROM python:3.9  # Or use the Python version you're working with
+FROM python:3.9
 
-WORKDIR /app  # Set the working directory
+WORKDIR /app
 
-COPY requirements.txt .  # Copy requirements.txt into the container
+COPY requirments.txt .
 
-RUN pip install --no-cache-dir -r requirments.txt  # Install dependencies
+RUN pip install --no-cache-dir -r requirments.txt
 
-COPY . .  # Copy the rest of your Django project into the container
+COPY . .
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]  # Start Django
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+
+
+
+#FROM python:3.9  # Or use the Python version you're working with
+
+#WORKDIR /app  # Set the working directory
+
+#COPY requirements.txt .  # Copy requirements.txt into the container
+
+#RUN pip install --no-cache-dir -r requirments.txt  # Install dependencies
+
+#COPY . .  # Copy the rest of your Django project into the container
+
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]  # Start Django
+
 
 
 
