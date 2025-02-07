@@ -16,6 +16,13 @@ jobs:
         echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > private_key.pem
         chmod 400 private_key.pem
 
+    - name: Debug SSH Directory
+      run: |
+        echo "Home Directory: $HOME"
+        ls -ld $HOME
+        ls -ld ~/.ssh || echo "No .ssh directory found"
+
+
     - name: Add EC2 Host to Known Hosts
       run: |
         mkdir -p $HOME/.ssh
