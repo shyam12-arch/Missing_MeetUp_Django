@@ -18,8 +18,12 @@ jobs:
 
     - name: Create .ssh Directory and Add EC2 Host to Known Hosts
       run: |
-        sudo mkdir -p ~/.ssh
+        mkdir -p ~/.ssh   # Do not use sudo
+        chmod 700 ~/.ssh  # Set correct permissions
+        touch ~/.ssh/known_hosts  # Ensure file exists
+        chmod 644 ~/.ssh/known_hosts  # Set correct permissions for known_hosts
         ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+
 
     - name: Copy Files to EC2
       run: |
