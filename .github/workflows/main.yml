@@ -26,7 +26,10 @@ jobs:
     - name: Add EC2 Host to Known Hosts
       run: |
         mkdir -p $HOME/.ssh
+        chmod 700 $HOME/.ssh  # Ensure it's secure
         ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> $HOME/.ssh/known_hosts
+        chmod 644 $HOME/.ssh/known_hosts  # Correct permissions
+
 
     - name: Copy Project Files to EC2
       run: |
