@@ -14,32 +14,28 @@ jobs:
     - name: Set up SSH Key
       run: |
         echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > private_key.pem
-        chmod 400 private_key.pem
+        chmod 600 private_key.pem
 
     - name: Create .ssh Directory and Add EC2 Host to Known Hosts
       run: |
-        mkdir -p ~/.ssh   # Do not use sudo
-        chmod 700 ~/.ssh  # Set correct permissions
-        touch ~/.ssh/known_hosts  # Ensure file exists
-        chmod 644 ~/.ssh/known_hosts  # Set correct permissions for known_hosts
-        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> ~/.ssh/known_hosts
-
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ec2-54-89-247-128.compute-1.amazonaws.com >> ~/.ssh/known_hosts
 
     - name: Copy Files to EC2
       run: |
-        scp -i private_key.pem -r . ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com/home/ubuntu/django_project/Missing_MeetUp_Django
+        scp -i private_key.pem -r . ubuntu@ec2-54-89-247-128.compute-1.amazonaws.com:/home/ubuntu/django_project
 
     - name: Build and Run Docker on EC2
       run: |
         echo "Starting SSH to EC2..."
-        ssh -i private_key.pem ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com << 'EOF'
+        ssh -i private_key.pem ubuntu@ec2-54-89-247-128.compute-1.amazonaws.com << 'EOF'
         echo "Removing old containers..."
-        docker ps -aq --filter name=my-python-app-container | xargs -I {} docker rm -f {}
+        docker ps -aq --filter name=missing-django-container | xargs -I {} docker rm -f {}
         echo "Building Docker image..."
-        cd /home/ubuntu/django_project/Missing_MeetUp_Django
-        docker build -t my-python-app .
+        cd /home/ubuntu/django_project
+        docker build -t missing_django_app .
         echo "Running Docker container..."
-        docker run -d --name my-python-app-container -p 8080:8080 my-python-app
+        docker run -d --name missing-django-container -p 8080:8080 missing_django_app
         EOF
 
 
