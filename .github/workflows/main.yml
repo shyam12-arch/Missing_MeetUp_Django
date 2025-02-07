@@ -32,12 +32,13 @@ jobs:
 
     - name: Add EC2 Host to Known Hosts
       run: |
-        export SSH_DIR="/home/runner/work/.ssh"
-        mkdir -p $SSH_DIR
-        chmod 700 $SSH_DIR
-        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> $SSH_DIR/known_hosts
-        chmod 644 $SSH_DIR/known_hosts
+        export SSH_DIR="$HOME/.ssh"
+        sudo mkdir -p $SSH_DIR  # Use sudo to ensure it works
+        sudo chmod 700 $SSH_DIR  # Ensure correct permissions
+        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com | sudo tee -a $SSH_DIR/known_hosts > /dev/null
+        sudo chmod 644 $SSH_DIR/known_hosts
         echo "Using $SSH_DIR as SSH directory."
+
 
 
     - name: Copy Files to EC2
