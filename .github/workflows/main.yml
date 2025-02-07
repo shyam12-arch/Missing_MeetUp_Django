@@ -30,7 +30,7 @@ jobs:
         echo "Starting SSH to EC2..."
         ssh -i private_key.pem ubuntu@ec2-54-89-247-128.compute-1.amazonaws.com << 'EOF'
         echo "Removing old containers..."
-        sudo docker ps -aq --filter name=missing-django-container | xargs -I {} sudo docker rm -f {}
+        sudo docker ps -aq --filter name=missing-django-container | xargs -r sudo docker rm -f
         echo "Building Docker image..."
         cd /home/ubuntu/django_project
         sudo docker build -t missing_django_app .
