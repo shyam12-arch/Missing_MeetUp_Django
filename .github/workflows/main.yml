@@ -25,11 +25,13 @@ jobs:
 
     - name: Add EC2 Host to Known Hosts
       run: |
-        mkdir -p /tmp/.ssh
-        chmod 700 /tmp/.ssh
-        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> /tmp/.ssh/known_hosts
-        chmod 644 /tmp/.ssh/known_hosts
-        echo "Using /tmp/.ssh as SSH directory."
+        export SSH_DIR="$HOME/.ssh"
+        mkdir -p $SSH_DIR
+        chmod 700 $SSH_DIR
+        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> $SSH_DIR/known_hosts
+        chmod 644 $SSH_DIR/known_hosts
+        echo "Using $SSH_DIR as SSH directory."
+
 
 
 
