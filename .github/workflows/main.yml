@@ -25,15 +25,18 @@ jobs:
 
     - name: Add EC2 Host to Known Hosts
       run: |
-        mkdir -p $HOME/.ssh
-        chmod 700 $HOME/.ssh  # Ensure it's secure
-        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> $HOME/.ssh/known_hosts
-        chmod 644 $HOME/.ssh/known_hosts  # Correct permissions
+        mkdir -p /tmp/.ssh
+        chmod 700 /tmp/.ssh
+        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> /tmp/.ssh/known_hosts
+        chmod 644 /tmp/.ssh/known_hosts
+        echo "Using /tmp/.ssh as SSH directory."
 
 
-    - name: Copy Project Files to EC2
+
+    - name: Copy Files to EC2
       run: |
-        scp -i private_key.pem -r . ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com:/home/ubuntu/missing-meetup
+        scp -o UserKnownHostsFile=/tmp/.ssh/known_hosts -i private_key.pem -r . ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com:/home/ubuntu/django_project/Missing_MeetUp_Django
+
 
     - name: Deploy on EC2
       run: |
@@ -43,7 +46,7 @@ jobs:
         sudo apt update -y && sudo apt install -y docker.io
 
         echo "Navigating to project directory..."
-        cd /home/ubuntu/missing-meetup
+        cd /home/ubuntu/django_project/Missing_MeetUp_Django
 
         echo "Stopping and Removing Old Containers..."
         docker ps -aq --filter name=missing-meetup-django-container | xargs -r docker rm -f
