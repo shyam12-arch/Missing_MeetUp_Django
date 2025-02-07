@@ -1,0 +1,7 @@
+[2025-02-02 17:47:46,862] INFO Creating topic missing_persons with configuration {} and initial partition assignment HashMap(0 -> ArrayBuffer(0)) (kafka.zk.AdminZkClient)
+[2025-02-02 17:47:47,105] INFO [Controller id=0, targetBrokerId=0] Node 0 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2025-02-02 17:47:47,154] INFO [ReplicaFetcherManager on broker 0] Removed fetcher for partitions Set(missing_persons-0) (kafka.server.ReplicaFetcherManager)
+[2025-02-02 17:47:47,298] INFO [LogLoader partition=missing_persons-0, dir=/tmp/kafka-logs] Loading producer state till offset 0 with message format version 2 (kafka.log.UnifiedLog$)
+[2025-02-02 17:47:47,326] INFO Created log for partition missing_persons-0 in /tmp/kafka-logs/missing_persons-0 with properties {} (kafka.log.LogManager)
+[2025-02-02 17:47:47,331] INFO [Partition missing_persons-0 broker=0] No checkpointed highwatermark is found for partition missing_persons-0 (kafka.cluster.Partition)
+[2025-02-02 17:47:47,334] INFO [Partition missing_persons-0 broker=0] Log loaded for partition missing_persons-0 with initial high watermark 0 (kafka.cluster.Partition)

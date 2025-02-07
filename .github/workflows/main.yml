@@ -1,0 +1,48 @@
+name: Deploy to Amazon EC2
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-to-ec2:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH Key
+      run: |
+        echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > private_key.pem
+        chmod 400 private_key.pem
+
+    - name: Create .ssh Directory and Add EC2 Host to Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ec2-44-202-12-249.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+
+    - name: Copy Files to EC2
+      run: |
+        scp -i private_key.pem \
+          Dockerfile manage.py \
+          ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com:/home/ubuntu/
+
+    - name: Build and Run Docker on EC2
+      run: |
+        echo "Starting SSH to EC2..."
+        ssh -i private_key.pem ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com << 'EOF'
+        echo "Removing old containers..."
+        docker ps -aq --filter name=missing-meetup-django-container | xargs -I {} docker rm -f {}
+        echo "Building Docker image..."
+        cd /home/ubuntu
+        docker build -t missing-meetup-django .
+        echo "Running Docker container..."
+        docker run -d --name missing-meetup-django-container -p 8080:8080 missing-meetup-django
+        EOF
+
+
+    - name: Clean Up
+      run: |
+        rm -f private_key.pem
+
+
