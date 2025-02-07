@@ -24,7 +24,7 @@ jobs:
     - name: Copy Files to EC2
       run: |
         scp -i private_key.pem \
-          Dockerfile manage.py \
+          -r . \
           ubuntu@ec2-44-202-12-249.compute-1.amazonaws.com:/home/ubuntu/
 
     - name: Build and Run Docker on EC2
